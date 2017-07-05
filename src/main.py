@@ -11,7 +11,7 @@ from detector import Detector
 
 
 def main():
-	#check if the run.sh is in correct form
+	# check if the run.sh is in correct form
 	if len(sys.argv) != 4:
 		print('Usage: <scrip_name> <file path to batch log> <file path to stream log>', 
 			'<file path to output')
@@ -27,7 +27,7 @@ def main():
 	assert len(batch_lines) >= 1, (
 		'Unexpected number of batch lines: {}'.format(len(batch_lines)))
 
-	# get the #degree and #tracked_number from the first line of input
+	# get the degree and tracked_number from the first line of input
 	fl_json = json.loads(batch_lines[0])
 	D = int(fl_json['D'])
 	T = int(fl_json['T'])
@@ -38,7 +38,7 @@ def main():
 	output = open(output_log, 'w')
 
 	cnt = 0
-	#read the record in stream_log line-in-line
+	# read and process the event record in stream_log line-in-line
 	for cur_ln in open(stream_log, 'r'):
 		cur_ln = cur_ln.strip()
 		cnt += 1
@@ -46,7 +46,7 @@ def main():
 			continue
 
 		if cnt % 100 == 0:
-			# print log every 10 lines
+			# print log every 100 lines to track the processing of current line number
 			print('Processed {} lines..'.format(cnt))
 
 		info = json.loads(cur_ln)
@@ -54,13 +54,13 @@ def main():
 
 		if ret is None:
 			continue
-			
+
 		assert info['event_type'] == 'purchase', (
 			'Unexpected event_type: {}'.format(info['event_type']))
-		#if the input is a purchase record from the stream_log, get the return value
-		#from the detector
+		# if the input is a purchase record from the stream_log, get the return value
+		# from the detector
 		amount, mean, std = ret
-		#check if the input purchase is an anomaly
+		# check if the input purchase is an anomaly
 		if numpy.abs(amount - mean) >= std * 3:
 			output_ln = '{}, "mean": "{:.2f}", "sd": "{:.2f}"}}\n'.format(cur_ln[:-1], mean, std)
 			output.write(output_ln)

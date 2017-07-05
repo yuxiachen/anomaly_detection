@@ -35,9 +35,9 @@ class SocialNetwork(object):
 		'''
 		get num_tracked of purchase history within the user's network defined by degree
 		'''
+		# get the list of all the friend's id of `user_id` defined by degree
 		id_in_degree = set([user_id])
 		boundary = set([user_id])
-
 		for i in range(degree):
 			new_boundary = set()
 			for boundary_id in boundary:
@@ -68,13 +68,16 @@ class SocialNetwork(object):
 			for j in range(k):
 				if ptr_list[j] < 0:
 					continue
+				# get the latest purchase sorting by the timestamp and the input order
 				if latest_purchase is None or (
 						purchases_list[j][ptr_list[j]][0:2] > latest_purchase[0:2]):
 					latest_purchase = purchases_list[j][ptr_list[j]]
 					latest_j = j
+			# break if the number of all the purchases in the social network is smaller than num_tracked 
 			if latest_j is None:
 				break
-
+			# add the amount of the current latest purchase to the answer list
+			# move the point to the next one
 			ans_list.append(latest_purchase[2])
 			ptr_list[latest_j] = ptr_list[latest_j] - 1
 		

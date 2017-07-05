@@ -22,7 +22,7 @@
             |   │   └── stream_log.json
             |   |__ log_output
             |   │   └── flagged_purchases.json
-            ├── my-own-test
+            ├── my_own_test
                 ├── log_input
                 │   └── batch_log.txt
                 │   └── stream_log.txt
